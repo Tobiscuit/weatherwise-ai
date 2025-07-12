@@ -75,35 +75,35 @@ const server = fastify_fastify({
 
 const weatherCodeToImage = (code: number): string => {
   switch (code) {
-    case 0: return "img/clear.svg";
-    case 1: return "img/clear.svg";
-    case 2: return "img/cloudy.svg";
-    case 3: return "img/overcast.svg";
-    case 45: return "img/fog.svg";
-    case 48: return "img/fog.svg";
-    case 51: return "img/drizzle.svg";
-    case 53: return "img/drizzle.svg";
-    case 55: return "img/drizzle.svg";
-    case 56: return "img/drizzle.svg";
-    case 57: return "img/drizzle.svg";
-    case 61: return "img/rain.svg";
-    case 63: return "img/rain.svg";
-    case 65: return "img/rain.svg";
-    case 66: return "img/rain.svg";
-    case 67: return "img/rain.svg";
-    case 71: return "img/snow.svg";
-    case 73: return "img/snow.svg";
-    case 75: return "img/snow.svg";
-    case 77: return "img/snow.svg";
-    case 80: return "img/rain.svg";
-    case 81: return "img/rain.svg";
-    case 82: return "img/rain.svg";
-    case 85: return "img/snow.svg";
-    case 86: return "img/snow.svg";
-    case 95: return "img/thunderstorm.svg";
-    case 96: return "img/thunderstorm.svg";
-    case 99: return "img/thunderstorm.svg";
-    default: return "img/info.svg";
+    case 0: return "weather-icons/clear.svg";
+    case 1: return "weather-icons/clear.svg";
+    case 2: return "weather-icons/cloudy.svg";
+    case 3: return "weather-icons/overcast.svg";
+    case 45: return "weather-icons/fog.svg";
+    case 48: return "weather-icons/fog.svg";
+    case 51: return "weather-icons/drizzle.svg";
+    case 53: return "weather-icons/drizzle.svg";
+    case 55: return "weather-icons/drizzle.svg";
+    case 56: return "weather-icons/drizzle.svg";
+    case 57: return "weather-icons/drizzle.svg";
+    case 61: return "weather-icons/rain.svg";
+    case 63: return "weather-icons/rain.svg";
+    case 65: return "weather-icons/rain.svg";
+    case 66: return "weather-icons/rain.svg";
+    case 67: return "weather-icons/rain.svg";
+    case 71: return "weather-icons/snow.svg";
+    case 73: return "weather-icons/snow.svg";
+    case 75: return "weather-icons/snow.svg";
+    case 77: return "weather-icons/snow.svg";
+    case 80: return "weather-icons/rain.svg";
+    case 81: return "weather-icons/rain.svg";
+    case 82: return "weather-icons/rain.svg";
+    case 85: return "weather-icons/snow.svg";
+    case 86: return "weather-icons/snow.svg";
+    case 95: return "weather-icons/thunderstorm.svg";
+    case 96: return "weather-icons/thunderstorm.svg";
+    case 99: return "weather-icons/thunderstorm.svg";
+    default: return "weather-icons/info.svg";
   }
 };
 
