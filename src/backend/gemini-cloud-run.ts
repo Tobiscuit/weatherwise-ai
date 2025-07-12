@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { GoogleAuth } from 'google-auth-library';
 
 // Cloud Run function URL (will be set after deployment)
