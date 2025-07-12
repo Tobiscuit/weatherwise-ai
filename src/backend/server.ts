@@ -170,7 +170,9 @@ server.get("/", async (request, reply) => {
     let geminiTime = 0;
     try {
       const geminiStart = Date.now();
-      wittyWeather = await getWittyWeatherFromCloudRun(weatherInfo, locationInfo.lat, locationInfo.lon);
+      const latNum = parseFloat(locationInfo.lat);
+      const lonNum = parseFloat(locationInfo.lon);
+      wittyWeather = await getWittyWeatherFromCloudRun(weatherInfo, latNum, lonNum);
       geminiTime = Date.now() - geminiStart;
     } catch (e) {
       wittyWeather = 'Unable to generate a witty weather summary.';
