@@ -1,10 +1,16 @@
-/** @type {import('tailwindcss').Config} */
-import typography from '@tailwindcss/typography';
+const designSystem = require('./design-system.json');
 
-export default {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,njk,html}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: designSystem.colors,
+      spacing: designSystem.spacing,
+      fontFamily: designSystem.fontFamily,
+    },
   },
-  plugins: [typography],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };
