@@ -225,7 +225,7 @@ server.get("/", async (request, reply) => {
 
 const start = async (): Promise<void> => {
   try {
-    const port = typeof process.env.PORT === 'string' ? Number(process.env.PORT) : 8089;
+    const port = typeof process.env['PORT'] === 'string' ? Number(process.env['PORT']) : 8089;
     await server.listen({ port, host: '0.0.0.0' });
   } catch (err) {
     server.log.error(err);
