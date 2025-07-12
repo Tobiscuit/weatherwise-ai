@@ -29,13 +29,21 @@ export async function getWittyWeatherFromCloudRun(
     return 'Cloud Run URL not configured.';
   }
 
+  // Create a plain data object, calling the functions
+  const plainWeatherData = {
+    temperature: weatherData.temperature,
+    condition: (weatherData.condition !== undefined) ? weatherData.condition() : 'Unknown',
+    highTemp: (weatherData.highTemp !== undefined) ? weatherData.highTemp() : undefined,
+    lowTemp: (weatherData.lowTemp !== undefined) ? weatherData.lowTemp() : undefined,
+  };
+
   try {
     const auth = new GoogleAuth();
     const client = await auth.getIdTokenClient(CLOUD_RUN_URL);
     const response = await client.request<CloudRunResponse>({
       url: CLOUD_RUN_URL,
       method: 'POST',
-      data: { weatherData, lat, lon },
+      data: { weatherData: plainWeatherData, lat, lon },
       timeout: 10000, // 10 seconds
     });
 
