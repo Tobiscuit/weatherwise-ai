@@ -49,7 +49,7 @@ export async function getWittyWeatherFromCloudRun(
 
     return response.data.wittyWeather;
   } catch (error) {
-    console.error('Error fetching witty weather:', error);
+    console.error('Error fetching witty weather:', JSON.stringify(error, null, 2));
     return 'Unable to get a witty weather summary right now.';
   }
 }
