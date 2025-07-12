@@ -1,0 +1,145 @@
+{% extends "main.njk" %}
+
+{% block title %}Weather{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <!-- Header -->
+  <header class="p-4 sm:p-6">
+    <div class="max-w-7xl mx-auto flex flex-col gap-4">
+      <!-- Logo and Title -->
+      <div class="flex items-center justify-center sm:justify-start gap-2 sm:gap-3">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+          <span class="text-white text-xl sm:text-2xl">☁️</span>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white font-['Lora']">WeatherWise</h1>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-['Nunito_Sans']">Your AI Weather Companion</p>
+        </div>
+      </div>
+      
+      <!-- Search Form -->
+      <form method="GET" action="/" class="flex flex-col sm:flex-row gap-3 w-full">
+        <input 
+          type="text" 
+          name="location" 
+          placeholder="Enter a location..." 
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 font-['Nunito_Sans'] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
+          required
+        >
+        <button 
+          type="submit" 
+          class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg font-['Nunito_Sans'] transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-base"
+        >
+          Search
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 min-h-[calc(100vh-200px)]">
+      
+      <!-- Left Column: Weather Info -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 flex flex-col">
+        <!-- Location and Date -->
+        <div class="text-center mb-4 sm:mb-6 lg:mb-8">
+          <h2 class="font-['Lora'] text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">{{ location }}</h2>
+          <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base lg:text-lg font-['Nunito_Sans']">{{ currentDate }}</p>
+        </div>
+
+        <!-- Weather Icon and Condition -->
+        <div class="flex flex-col items-center mb-4 sm:mb-6 lg:mb-8 flex-1">
+          <img src="{{ weather.conditionImg }}" class="w-24 h-24 sm:w-32 sm:h-32 lg:w-48 lg:h-48 dark:invert mb-3 sm:mb-4 lg:mb-6" alt="Weather condition">
+          <p class="text-gray-700 dark:text-gray-300 text-lg sm:text-xl lg:text-2xl font-['Nunito_Sans'] font-medium text-center">{{ weather.condition }}</p>
+        </div>
+
+        <!-- Temperature Display -->
+        <div class="flex justify-center items-center gap-4 sm:gap-6 lg:gap-8 mb-4 sm:mb-6 lg:mb-8">
+          <div class="text-center">
+            <span class="block text-3xl sm:text-4xl lg:text-5xl font-bold text-orange-600 dark:text-orange-400 font-['Lora']">{{ weather.highTemp }}{{ weather.temperature.unit }}</span>
+            <span class="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 font-['Nunito_Sans']">High</span>
+          </div>
+          <div class="text-gray-400 dark:text-gray-600 text-2xl sm:text-3xl lg:text-4xl">/</div>
+          <div class="text-center">
+            <span class="block text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-600 dark:text-blue-400 font-['Lora']">{{ weather.lowTemp }}{{ weather.temperature.unit }}</span>
+            <span class="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 font-['Nunito_Sans']">Low</span>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        {% if serverMsg %}
+          <div class="p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg text-center">
+            {{ serverMsg }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Right Column: AI Companion -->
+      <div class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 flex flex-col">
+        <!-- Nimbus the Cloud Mascot -->
+        <div class="text-center mb-4 sm:mb-6">
+          <div class="inline-flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-700 rounded-full px-4 sm:px-6 py-2 sm:py-3 shadow-lg">
+            <div class="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+              <span class="text-white text-lg sm:text-2xl">☁️</span>
+            </div>
+            <div class="text-left">
+              <h3 class="font-bold text-blue-700 dark:text-blue-300 text-lg sm:text-xl font-['Nunito_Sans']">Nimbus</h3>
+              <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-['Nunito_Sans']">Your Weather Buddy</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Weather Summary -->
+        {% if wittyWeather %}
+          <div class="flex-1 bg-white dark:bg-gray-700 rounded-xl p-4 sm:p-6 shadow-lg">
+            <div class="flex items-start gap-3 sm:gap-4">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <span class="text-white text-sm sm:text-lg">☁️</span>
+              </div>
+              <div class="flex-1">
+                <p class="text-gray-800 dark:text-gray-200 text-sm sm:text-base lg:text-lg font-['Nunito_Sans'] leading-relaxed">{{ wittyWeather }}</p>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="flex-1 bg-white dark:bg-gray-700 rounded-xl p-4 sm:p-6 shadow-lg flex items-center justify-center">
+            <div class="text-center">
+              <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <span class="text-white text-xl sm:text-2xl">☁️</span>
+              </div>
+              <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base font-['Nunito_Sans']">Search for a location to get Nimbus's weather insights!</p>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Fun Facts Section -->
+        <div class="mt-4 sm:mt-6 bg-white dark:bg-gray-700 rounded-xl p-4 sm:p-6 shadow-lg">
+          <h4 class="font-bold text-gray-900 dark:text-white text-base sm:text-lg mb-2 sm:mb-3 font-['Nunito_Sans']">Did you know? 🌤️</h4>
+          <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base font-['Nunito_Sans'] leading-relaxed">
+            {% if weather.condition == "Clear sky" %}
+              Clear skies mean excellent visibility! Perfect for stargazing tonight.
+            {% elif weather.condition == "Rain" or weather.condition == "Heavy rain" %}
+              Rain helps clean the air and water our plants. Nature's way of refreshing!
+            {% elif weather.condition == "Snow" or weather.condition == "Heavy snow fall" %}
+              Snow acts as a natural insulator, keeping the ground warm underneath!
+            {% elif weather.condition == "Thunderstorm" %}
+              Lightning can travel up to 10 miles horizontally from a storm cloud!
+            {% else %}
+              Every weather pattern tells a story about our amazing atmosphere!
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 px-6">
+    <p class="text-gray-500 dark:text-gray-400 text-sm font-['Nunito_Sans'] px-4 sm:px-6 leading-relaxed">
+      Powered by Nimbus AI • Built with TypeScript • Weather data from Open-Meteo
+    </p>
+  </footer>
+</div>
+{% endblock %}

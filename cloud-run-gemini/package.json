@@ -1,0 +1,19 @@
+{
+  "name": "weather-gemini-cloud-run",
+  "version": "1.0.0",
+  "description": "Cloud Run function for Gemini weather API calls",
+  "main": "index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "google-auth-library": "^9.0.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "gcloud run deploy weather-gemini --source . --region us-south1 --allow-unauthenticated --set-env-vars GEMINI_API_KEY=$GEMINI_API_KEY"
+  }
+} 

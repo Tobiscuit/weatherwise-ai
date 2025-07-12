@@ -1,0 +1,26 @@
+# This file tells gcloud to ignore certain files when deploying.
+
+.gcloudignore
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build output
+dist/
+
+# Environment variables
+.env
+
+# Git
+.git/
+.gitignore
+
+# Other
+.DS_Store
+*.pem
+*.log
+
+# Deployment files
+DEPLOYMENT_GUIDE.md 

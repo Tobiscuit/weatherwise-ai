@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design System Custom Styles */
+@layer base {
+  html {
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Lora', serif;
+  }
+}
+
+@layer components {
+  /* Smooth transitions for all interactive elements */
+  * {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  /* Custom focus styles */
+  .focus-ring:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #4D94FF;
+    ring-offset: 2px;
+  }
+  
+  /* Loading animation for weather data */
+  .weather-loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  /* Subtle hover effects */
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+}
+
+@layer utilities {
+  /* Custom spacing utilities */
+  .space-sage {
+    letter-spacing: 0.025em;
+  }
+  
+  .space-caregiver {
+    letter-spacing: 0.01em;
+  }
+}
+

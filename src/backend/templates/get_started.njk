@@ -1,0 +1,135 @@
+{% extends "main.njk" %}
+
+{% block title %}WeatherWise{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <!-- Header -->
+  <header class="p-4 sm:p-6">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+          <span class="text-white text-xl sm:text-2xl">☁️</span>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white font-['Lora']">WeatherWise</h1>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-['Nunito_Sans']">Your AI Weather Companion</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 min-h-[calc(100vh-200px)]">
+      
+      <!-- Left Column: Welcome -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center">
+        <div class="text-center">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 lg:mb-8 shadow-lg">
+            <span class="text-white text-3xl sm:text-4xl lg:text-6xl">☁️</span>
+          </div>
+          <h2 class="font-['Lora'] text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-4">Welcome to WeatherWise!</h2>
+          <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg lg:text-xl font-['Nunito_Sans'] mb-4 sm:mb-6 lg:mb-8">
+            Get personalized weather insights from your friendly AI companion, Nimbus!
+          </p>
+          
+          <!-- Error Message -->
+          {% if serverMsg %}
+            <div class="p-3 sm:p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg text-center mb-4 sm:mb-6">
+              {{ serverMsg }}
+            </div>
+          {% endif %}
+
+          <!-- Search Form -->
+          <form method="GET" action="/" class="space-y-3 sm:space-y-4">
+            <div>
+              <input 
+                type="text" 
+                name="location" 
+                placeholder="Enter a location..." 
+                class="w-full px-4 sm:px-6 py-3 sm:py-4 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 font-['Nunito_Sans'] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base sm:text-lg"
+                required
+              >
+            </div>
+            <button 
+              type="submit" 
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-['Nunito_Sans'] transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-base sm:text-lg"
+            >
+              Get Weather
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Nimbus Introduction -->
+      <div class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 flex flex-col">
+        <!-- Nimbus the Cloud Mascot -->
+        <div class="text-center mb-4 sm:mb-6 lg:mb-8">
+          <div class="inline-flex items-center gap-2 sm:gap-3 lg:gap-4 bg-white dark:bg-gray-700 rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 shadow-lg">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+              <span class="text-white text-xl sm:text-2xl lg:text-3xl">☁️</span>
+            </div>
+            <div class="text-left">
+              <h3 class="font-bold text-blue-700 dark:text-blue-300 text-lg sm:text-xl lg:text-2xl font-['Nunito_Sans']">Nimbus</h3>
+              <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-['Nunito_Sans']">Your Weather Buddy</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="flex-1 space-y-4 sm:space-y-6">
+          <div class="bg-white dark:bg-gray-700 rounded-xl p-4 sm:p-6 shadow-lg">
+            <div class="flex items-start gap-3 sm:gap-4">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <span class="text-white text-sm sm:text-lg">🌤️</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-900 dark:text-white text-base sm:text-lg mb-1 sm:mb-2 font-['Nunito_Sans']">Smart Weather Insights</h4>
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base font-['Nunito_Sans'] leading-relaxed">
+                  Get witty, personalized weather summaries that feel like chatting with a friend!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-gray-700 rounded-xl p-4 sm:p-6 shadow-lg">
+            <div class="flex items-start gap-3 sm:gap-4">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <span class="text-white text-sm sm:text-lg">🌍</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-900 dark:text-white text-base sm:text-lg mb-1 sm:mb-2 font-['Nunito_Sans']">Global Coverage</h4>
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base font-['Nunito_Sans'] leading-relaxed">
+                  Search any location worldwide and get accurate, location-appropriate temperature units.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-gray-700 rounded-xl p-4 sm:p-6 shadow-lg">
+            <div class="flex items-start gap-3 sm:gap-4">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <span class="text-white text-sm sm:text-lg">💡</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-900 dark:text-white text-base sm:text-lg mb-1 sm:mb-2 font-['Nunito_Sans']">Fun Weather Facts</h4>
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base font-['Nunito_Sans'] leading-relaxed">
+                  Learn interesting facts about weather patterns and atmospheric phenomena!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 px-6">
+    <p class="text-gray-500 dark:text-gray-400 text-sm font-['Nunito_Sans'] px-4 sm:px-6 leading-relaxed">
+      Powered by Nimbus AI • Built with TypeScript • Weather data from Open-Meteo
+    </p>
+  </footer>
+</div>
+{% endblock %}
