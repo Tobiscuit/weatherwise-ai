@@ -1,18 +1,14 @@
 {
   "extends": "../../tsconfig.json",
-  "ts-node": {
-    "files": true
-  },
-  "exclude": [
-    "coverage"
-  ],
   "compilerOptions": {
-    "types": [
-      "@types/jest"
-    ],
-    "module": "commonjs",
-    "typeRoots": [
-      "./src/backend/types"
-    ]
-  }
+    "outDir": "./dist",
+    "module": "commonjs"
+  },
+  "include": [
+    "src/backend/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts"
+  ]
 }
