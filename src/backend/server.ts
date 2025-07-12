@@ -162,6 +162,9 @@ server.get("/", async (request, reply) => {
     const locationInfo = await fetchLocationData(HTTP_CLIENT, GEOCODE_API_URL, location);
     const locationTime = Date.now() - locationStart;
     
+    // Log the location info to debug
+    console.log('Location Info:', JSON.stringify(locationInfo, null, 2));
+
     const weatherStart = Date.now();
     const weatherInfo = await fetchWeatherData(HTTP_CLIENT, WEATHER_API_URL, locationInfo.lat, locationInfo.lon, locationInfo.display_name);
     const weatherTime = Date.now() - weatherStart;
