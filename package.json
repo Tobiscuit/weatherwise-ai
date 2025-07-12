@@ -15,8 +15,8 @@
     "dev:backend": "nodemon -w ./src -e ts,njk,css --exec ts-node src/backend/server.ts",
     "dev:reload": "pnpm livereload -w 2500 -e html,css,njk,ts",
     "dev:frontend": "nodemon -w ./src -e ts --exec node build-frontend.js",
-    "build": "pnpm build:tailwind && pnpm build:frontend && pnpm build:templates && tsc",
-    "build:templates": "copyfiles -u 2 \"src/backend/templates/**/*.njk\" dist",
+    "build": "node build-production.js",
+    "build:templates": "copyfiles -u 2 \"src/backend/templates/**/*.njk\" dist/templates",
     "build:tailwind": "tailwindcss -i src/backend/templates/index.css -o dist/styles.css --minify",
     "build:frontend": "node build-frontend.js",
     "start": "node dist/server.js",
@@ -71,6 +71,7 @@
     "axios": "^1.4.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.17.0",
+    "google-auth-library": "^10.1.0",
     "nunjucks": "^3.2.4",
     "zod": "^3.21.4"
   }

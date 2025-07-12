@@ -68,7 +68,7 @@ const server = fastify_fastify({
 
   // serve static files
   server.register(staticFiles, {
-    root: path.join(process.cwd(), 'dist'),
+    root: path.join(process.cwd(), 'dist/static'),
     prefix: '/static/',
   });
 }

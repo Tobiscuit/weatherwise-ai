@@ -31,8 +31,11 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --prod
 
-# Copy the entire build output from the build stage
+# Copy the build output from the build stage
 COPY --from=build /app/dist ./dist
+
+# Copy the static assets from the top-level assets folder
+COPY --from=build /app/assets ./dist/static
 
 # Expose the port the app runs on
 EXPOSE 8089
