@@ -16,7 +16,7 @@
     "dev:reload": "pnpm livereload -w 2500 -e html,css,njk,ts",
     "dev:frontend": "nodemon -w ./src -e ts --exec node build-frontend.js",
     "build": "pnpm build:tailwind && pnpm build:frontend && pnpm build:templates && tsc",
-    "build:templates": "copyfiles -u 1 src/backend/templates/**/*.njk dist",
+    "build:templates": "copyfiles -u 2 \"src/backend/templates/**/*.njk\" dist",
     "build:tailwind": "tailwindcss -i src/backend/templates/index.css -o dist/styles.css --minify",
     "build:frontend": "node build-frontend.js",
     "start": "node dist/server.js",
