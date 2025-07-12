@@ -17,7 +17,7 @@ const WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast";
 const GEOCODE_API_URL = "https://geocode.maps.co/search";
 const HTTP_CLIENT = axios;
 
-const environment = process.env.NODE_ENV;
+const environment = process.env['NODE_ENV'];
 const templates = new nunjucks.Environment(new nunjucks.FileSystemLoader("dist/templates"));
 
 // Optimized cache with automatic cleanup
@@ -124,7 +124,7 @@ server.get("/", async (request, reply) => {
   const queryParams = request.query as Record<string, string>;
   
   // If no location provided, show the get started page and warm up Cloud Run
-  if (queryParams.location === undefined || queryParams.location === '') {
+  if (queryParams['location'] === undefined || queryParams['location'] === '') {
     // Warm up Cloud Run function in background (don't wait for it)
     void warmupCloudRun().catch(() => {
       // Silent fail

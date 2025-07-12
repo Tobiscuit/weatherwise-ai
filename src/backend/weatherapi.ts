@@ -102,7 +102,7 @@ export class CurrentWeather {
   }
 
   condition(): string {
-    return weatherCodes[this.weathercode];
+    return weatherCodes[this.weathercode] ?? 'Unknown';
   }
 }
 

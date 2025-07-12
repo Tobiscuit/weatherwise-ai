@@ -1,9 +1,7 @@
 import axios from 'axios';
 
 // Cloud Run function URL (will be set after deployment)
-const CLOUD_RUN_URL = process.env.CLOUD_RUN_URL !== undefined && process.env.CLOUD_RUN_URL !== '' 
-  ? process.env.CLOUD_RUN_URL 
-  : 'https://weather-gemini-xxxxx-uc.a.run.app';
+const CLOUD_RUN_URL = process.env['CLOUD_RUN_URL'] ?? '';
 
 interface WeatherData {
   temperature?: {
@@ -23,52 +21,39 @@ interface CloudRunResponse {
 
 export async function getWittyWeatherFromCloudRun(
   weatherData: WeatherData, 
-  lat?: string, 
-  lon?: string
+  lat?: number, 
+  lon?: number
 ): Promise<string> {
+  if (CLOUD_RUN_URL === '') {
+    return 'Cloud Run URL not configured.';
+  }
+
   try {
-    const response = await axios.post(
-      `${CLOUD_RUN_URL}/generateWeather`,
+    const response = await axios.post<CloudRunResponse>(
+      CLOUD_RUN_URL,
+      { weatherData, lat, lon },
       {
-        weatherData: {
-          temperature: weatherData.temperature,
-          condition: weatherData.condition?.(),
-          highTemp: weatherData.highTemp?.(),
-          lowTemp: weatherData.lowTemp?.(),
+        headers: {
+          'Content-Type': 'application/json',
         },
-        lat,
-        lon
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-        timeout: 10000 // 10 seconds for Cloud Run
+        timeout: 10000, // 10 seconds
       }
     );
-    
-    const data = response.data as CloudRunResponse;
-    return data.wittyWeather;
-    
+    return response.data.wittyWeather;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (error.code === 'ECONNABORTED') {
-        return 'Weather AI is taking too long to respond. Please try again!';
-      }
-      if (error.response?.status === 429) {
-        return 'Weather AI is a bit busy right now. Please try again in a moment!';
-      }
-    }
-    return 'Unable to generate a witty weather summary at this time.';
+    console.error('Error fetching witty weather:', error);
+    return 'Unable to get a witty weather summary right now.';
   }
 }
 
-// Warm up the Cloud Run function
 export async function warmupCloudRun(): Promise<void> {
+  if (CLOUD_RUN_URL === '') {
+    return;
+  }
+  
   try {
-    await axios.get(`${CLOUD_RUN_URL}/warmup`, {
-      timeout: 5000
-    });
-    console.log('✅ Cloud Run function warmed up');
+    await axios.get(`${CLOUD_RUN_URL}/warmup`, { timeout: 1000 });
   } catch (error) {
-    console.log('⚠️ Could not warm up Cloud Run function:', error);
+    // Silently fail
   }
 } 
