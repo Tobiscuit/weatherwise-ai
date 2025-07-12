@@ -40,13 +40,14 @@ export async function getWittyWeatherFromCloudRun(
   try {
     const auth = new GoogleAuth();
     const client = await auth.getIdTokenClient(CLOUD_RUN_URL);
+    
     const response = await client.request<CloudRunResponse>({
       url: CLOUD_RUN_URL,
       method: 'POST',
       data: { weatherData: plainWeatherData, lat, lon },
-      timeout: 10000, // 10 seconds
+      timeout: 10000,
     });
-
+    
     return response.data.wittyWeather;
   } catch (error) {
     console.error('Error fetching witty weather:', JSON.stringify(error, null, 2));
@@ -60,8 +61,10 @@ export async function warmupCloudRun(): Promise<void> {
   }
   
   try {
-    // No need to be authenticated for warmup
-    await axios.get(`${CLOUD_RUN_URL}/warmup`, { timeout: 1000 });
+    // Warmup does not need to be authenticated
+    const auth = new GoogleAuth();
+    const client = await auth.getClient();
+    await client.request({ url: `${CLOUD_RUN_URL}/warmup`, timeout: 1000 });
   } catch (error) {
     // Silently fail
   }
