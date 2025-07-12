@@ -15,7 +15,7 @@
     "dev:backend": "nodemon -w ./src -e ts,njk,css --exec ts-node src/backend/server.ts",
     "dev:reload": "pnpm livereload -w 2500 -e html,css,njk,ts",
     "dev:frontend": "nodemon -w ./src -e ts --exec node build-frontend.js",
-    "build": "pnpm build:tailwind && pnpm build:frontend && tsc --project ./tsconfig.json",
+    "build": "pnpm build:tailwind && pnpm build:frontend && tsc",
     "build:tailwind": "tailwindcss -i src/backend/templates/index.css -o dist/styles.css --minify",
     "build:frontend": "node build-frontend.js",
     "start": "node dist/server.js",
