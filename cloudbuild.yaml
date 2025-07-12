@@ -1,11 +1,11 @@
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io//weatherwise-ai:', '.']
+    args: ['build', '-t', 'gcr.io/${PROJECT_ID}/weatherwise-ai:${COMMIT_SHA}', '.']
 
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io//weatherwise-ai:']
+    args: ['push', 'gcr.io/${PROJECT_ID}/weatherwise-ai:${COMMIT_SHA}']
 
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -15,7 +15,7 @@ steps:
       - 'deploy'
       - 'weatherwise-ai'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/weatherwise-ai:$COMMIT_SHA'
+      - 'gcr.io/${PROJECT_ID}/weatherwise-ai:${COMMIT_SHA}'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -29,7 +29,7 @@ steps:
       - '--set-secrets=CLOUD_RUN_URL=weather-gemini-service-url:latest'
 
 images:
-  - 'gcr.io//weatherwise-ai:'
+  - 'gcr.io/${PROJECT_ID}/weatherwise-ai:${COMMIT_SHA}'
 
 options:
   logging: CLOUD_LOGGING_ONLY
