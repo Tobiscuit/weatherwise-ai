@@ -7,32 +7,25 @@ RUN npm install -g pnpm
 # Set the working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install
-
-# Copy the rest of the application source code
+# Copy all source files
 COPY . .
 
-# Build the application
+# Install dependencies and build the application
+RUN pnpm install
 RUN pnpm build
 
 
 # Use a smaller Node.js 20 slim image for the production stage
 FROM node:20-slim
 
-# Install pnpm
-RUN npm install -g pnpm
-
 # Set the working directory
 WORKDIR /app
 
 # Copy package files and install only production dependencies
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --prod
+RUN npm install -g pnpm && pnpm install --prod
 
 # Copy the entire build output from the build stage
-# This includes the compiled code, static assets, and templates
 COPY --from=build /app/dist ./dist
 
 # Expose the port the app runs on

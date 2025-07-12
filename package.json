@@ -10,19 +10,16 @@
     "url": "https://github.com/Tobiscuit/weatherwise-ai.git"
   },
   "scripts": {
-    "dev": "concurrently \"pnpm dev:tailwind\" \"pnpm dev:backend\" \"pnpm dev:frontend\" \"pnpm dev:reload\"",
-    "dev:tailwind": "tailwindcss -w -i src/backend/templates/index.css -o dist/styles.css",
-    "dev:backend": "nodemon -w ./src -e ts,njk,css --exec ts-node src/backend/server.ts",
-    "dev:reload": "pnpm livereload -w 2500 -e html,css,njk,ts",
-    "dev:frontend": "nodemon -w ./src -e ts --exec node build-frontend.js",
-    "build": "node build-production.js",
-    "build:templates": "copyfiles -u 3 \"src/backend/templates/**/*.njk\" dist/templates",
-    "build:tailwind": "tailwindcss -i src/backend/templates/index.css -o dist/styles.css --minify",
-    "build:frontend": "node build-frontend.js",
+    "clean": "rimraf dist",
+    "build:css": "tailwindcss -i src/backend/templates/index.css -o dist/static/styles.css --minify",
+    "copy:assets": "copyfiles -u 1 \"assets/**/*\" dist",
+    "copy:templates": "copyfiles -u 3 \"src/backend/templates/**/*.njk\" dist/templates",
+    "build:ts": "tsc --project tsconfig.json",
+    "build": "pnpm clean && pnpm build:css && pnpm copy:assets && pnpm copy:templates && pnpm build:ts",
     "start": "node dist/server.js",
-    "test": "jest",
-    "lint": "eslint",
-    "check": "node check.js"
+    "dev": "concurrently \"pnpm dev:tailwind\" \"pnpm dev:backend\"",
+    "dev:tailwind": "tailwindcss -w -i src/backend/templates/index.css -o dist/static/styles.css",
+    "dev:backend": "nodemon -w ./src -e ts,njk,css --exec ts-node src/backend/server.ts"
   },
   "engines": {
     "node": ">=20.0.0",
@@ -58,6 +55,7 @@
     "nodemon": "^2.0.22",
     "path": "^0.12.7",
     "postcss": "^8.4.23",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^3.3.2",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
