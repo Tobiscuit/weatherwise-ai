@@ -17,9 +17,10 @@
     "build:ts": "tsc --project tsconfig.json",
     "build": "pnpm clean && pnpm build:css && pnpm copy:assets && pnpm copy:templates && pnpm build:ts",
     "start": "node dist/server.js",
-    "dev": "concurrently \"pnpm dev:tailwind\" \"pnpm dev:backend\"",
-    "dev:tailwind": "tailwindcss -w -i src/backend/templates/index.css -o dist/static/styles.css",
-    "dev:backend": "nodemon -w ./src -e ts,njk,css --exec ts-node src/backend/server.ts"
+    "dev:all": "concurrently \"pnpm dev:tailwind\" \"pnpm dev:backend\"",
+    "dev:tailwind": "make-dir src/backend/static && tailwindcss -w -i ./src/backend/templates/index.css -o ./src/backend/static/styles.css",
+    "dev:backend": "nodemon -w ./src/backend --exec ts-node src/backend/server.ts",
+    "dev:microservice": "nodemon cloud-run-gemini/index.js"
   },
   "engines": {
     "node": ">=20.0.0",
@@ -52,6 +53,7 @@
     "glob": "^10.2.3",
     "jest": "^29.5.0",
     "livereload": "^0.9.3",
+    "make-dir-cli": "^4.0.0",
     "nodemon": "^2.0.22",
     "path": "^0.12.7",
     "postcss": "^8.4.23",
