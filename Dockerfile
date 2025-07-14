@@ -47,5 +47,5 @@ COPY --from=builder /usr/src/app/dist/templates ./dist/templates
 # Expose the port the app runs on
 EXPOSE 8089
 
-# The command to run the application
-CMD [ "node", "dist/server.js" ] 
+# The command to run the application - CHANGED TO USE THE PNPM SCRIPT
+CMD [ "pnpm", "start" ]
