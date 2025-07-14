@@ -16,7 +16,6 @@ import { weatherCodeToImage } from "./weather-codes";
 const httpClient = axios;
 const locationService = new LocationService(httpClient, config.GEOCODE_API_URL, config.GEOCODE_API_KEY);
 const weatherService = new WeatherService(httpClient, config.WEATHER_API_URL);
-// This is the only line that changes in this file:
 const geminiService = new GeminiService();
 
 // --- Fastify and Templating Setup ---
@@ -27,10 +26,10 @@ const templatePath = isProduction
   : 'src/backend/templates';
 const templates = new nunjucks.Environment(new nunjucks.FileSystemLoader(templatePath));
 
-// --- Caching Setup ---
-const cache = new Map<string, { html: string, timestamp: number }>();
-const CACHE_DURATION = config.CACHE_DURATION_MS;
-const MAX_CACHE_SIZE = config.MAX_CACHE_SIZE;
+// --- Caching Setup (Temporarily disabled for debugging) ---
+// const cache = new Map<string, { html: string, timestamp: number }>();
+// const CACHE_DURATION = config.CACHE_DURATION_MS;
+// const MAX_CACHE_SIZE = config.MAX_CACHE_SIZE;
 
 const server = fastify({
   logger: isProduction ? true : {
@@ -49,6 +48,8 @@ const locationSchema = z.object({
   location: z.string().min(1, 'Location cannot be empty.'),
 });
 
+// Unused cache functions are commented out to fix the build.
+/*
 function getCacheKey(location: string): string {
   return location.trim().toLowerCase().replace(/\s+/g, '-');
 }
@@ -68,6 +69,7 @@ function cleanupCache(): void {
     }
   }
 }
+*/
 
 server.register(formBody);
 server.register(staticFiles, {
@@ -87,27 +89,17 @@ server.get("/", async (request, reply) => {
   try {
     const { location } = locationSchema.parse(queryParams);
     
-    // const cacheKey = getCacheKey(location);
-    // if (isCacheValid(cacheKey)) {
-    //   const cachedData = cache.get(cacheKey);
-    //   if (cachedData !== undefined) {
-    //     void reply.header("Content-Type", "text/html; charset=utf-8").send(cachedData.html);
-    //     return;
-    //   }
-    // }
-    
-    cleanupCache();
+    // Caching logic is temporarily disabled.
+    // cleanupCache();
     
     const locationInfo = await locationService.fetchLocation(location);
     const weatherInfo = await weatherService.fetchWeather(locationInfo);
 
     let wittyWeather = 'Unable to generate a witty weather summary.';
     try {
-      // Your CurrentWeather model might be different, ensure it matches what GeminiService expects
       wittyWeather = await geminiService.generateWittySummary(weatherInfo, parseFloat(locationInfo.lat), parseFloat(locationInfo.lon));
     } catch (e: any) {
       server.log.error('Witty weather generation failed:', e.message);
-      // Non-critical error, so we can continue without it.
     }
     
     const rendered = templates.render("weather.njk", {
@@ -124,7 +116,9 @@ server.get("/", async (request, reply) => {
       wittyWeather,
     });
     
-    cache.set(cacheKey, { html: rendered, timestamp: Date.now() });
+    // Caching logic is temporarily disabled.
+    // const cacheKey = getCacheKey(location);
+    // cache.set(cacheKey, { html: rendered, timestamp: Date.now() });
     
     void reply.header("Content-Type", "text/html; charset=utf-8").send(rendered);
     return;
@@ -132,7 +126,7 @@ server.get("/", async (request, reply) => {
   } catch (e: any) {
     server.log.error(e);
     const rendered = templates.render("get_started.njk", { environment, serverMsg: e.message });
-    void reply.header("Content-Type", "text/html; charset=-8").status(500).send(rendered);
+    void reply.header("Content-Type", "text/html; charset=utf-8").status(500).send(rendered);
   }
 });
 
