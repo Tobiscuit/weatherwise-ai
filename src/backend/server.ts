@@ -87,14 +87,14 @@ server.get("/", async (request, reply) => {
   try {
     const { location } = locationSchema.parse(queryParams);
     
-    const cacheKey = getCacheKey(location);
-    if (isCacheValid(cacheKey)) {
-      const cachedData = cache.get(cacheKey);
-      if (cachedData !== undefined) {
-        void reply.header("Content-Type", "text/html; charset=utf-8").send(cachedData.html);
-        return;
-      }
-    }
+    // const cacheKey = getCacheKey(location);
+    // if (isCacheValid(cacheKey)) {
+    //   const cachedData = cache.get(cacheKey);
+    //   if (cachedData !== undefined) {
+    //     void reply.header("Content-Type", "text/html; charset=utf-8").send(cachedData.html);
+    //     return;
+    //   }
+    // }
     
     cleanupCache();
     
