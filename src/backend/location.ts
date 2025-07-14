@@ -9,8 +9,8 @@ export const locationSchema = z.array(z.object({
   lat: z.string(),
   lon: z.string(),
   display_name: z.string(),
-  place_rank: z.number(),
-  category: z.string(),
+  place_rank: z.number().optional(),
+  category: z.string().optional(),
   type: z.string(),
   importance: z.number(),
   address: z.object({
