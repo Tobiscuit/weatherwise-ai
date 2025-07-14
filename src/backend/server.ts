@@ -133,7 +133,8 @@ server.get("/", async (request, reply) => {
 const start = async (): Promise<void> => {
   try {
     const port = config.PORT;
-    const host = isProduction ? '0.0.0.0' : config.HOST;
+    // TEMPORARY DEBUGGING STEP: Hardcode the host to 0.0.0.0
+    const host = '0.0.0.0'; 
     await server.listen({ port, host });
     console.log(`Server listening on http://${host}:${port}`);
   } catch (err) {
