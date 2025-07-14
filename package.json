@@ -16,7 +16,7 @@
     "copy:templates": "copyfiles -u 3 \"src/backend/templates/**/*.njk\" dist/templates",
     "build:ts": "tsc --project tsconfig.json",
     "build": "pnpm clean && pnpm build:css && pnpm copy:assets && pnpm copy:templates && pnpm build:ts",
-    "start": "node dist/server.js",
+    "start": "NODE_ENV=production node dist/server.js",
     "dev:all": "concurrently \"pnpm dev:tailwind\" \"pnpm dev:backend\"",
     "dev:tailwind": "make-dir src/backend/static && tailwindcss -w -i ./src/backend/templates/index.css -o ./src/backend/static/styles.css",
     "dev:backend": "nodemon -w ./src/backend --exec ts-node src/backend/server.ts",
