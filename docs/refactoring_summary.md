@@ -136,7 +136,23 @@ The final touch was to professionalize the deployment process. I analyzed the ex
 
 This project is a showcase of an engineering mindset that values clarity, simplicity, and robustness over unnecessary complexity. It demonstrates the ability to critically analyze an existing architecture, propose a bold but reasoned alternative, and execute that vision through disciplined, test-driven development and the application of established design patterns.
 
-The final artifact is not just a working application; it is a clean, well-documented, fully-tested codebase with a professional, automated deployment pipeline—a testament to the craft of software engineering.
+### Architectural Limitations and Future Work
+
+A key principle of senior-level architecture is understanding the trade-offs and limitations of any design. While this application is now robust, tested, and maintainable, it is optimized for clarity and cost-effectiveness as a portfolio piece, not for high-traffic production loads. The following points represent the next logical iteration to make it a truly production-grade system.
+
+**1. The Scalability Trap of In-Memory Caching:**
+The most significant limitation is the use of a simple `Map` object for caching. In a serverless environment like Google Cloud Run, which scales by creating multiple, independent container instances, each instance would have its own isolated cache. This leads to inconsistent performance and low cache-hit ratios under load.
+- **The Solution:** Implement the **Strategy Pattern** for caching. We would define a `CacheStrategy` interface and create two implementations: an `InMemoryCacheStrategy` for local development, and a `RedisCacheStrategy` for production. The production strategy would connect to a managed, distributed cache like **Google Cloud Memorystore for Redis**, ensuring all container instances share a single, consistent cache.
+
+**2. Brittleness to External Service Failure:**
+The current service layer is optimistic and does not explicitly handle scenarios where a downstream dependency (like the Geocoding or Weather API) becomes slow or unresponsive. This can lead to blocked request threads and cascading failures.
+- **The Solution:** Implement the **Circuit Breaker Pattern**. By wrapping external API calls in a circuit breaker (e.g., using a library like `opossum`), the application could detect when a downstream service is failing. It would "trip the breaker," failing fast on subsequent requests for a period of time, allowing the dependency to recover and protecting our own application from being dragged down.
+
+**3. Undefined Production Secret Management:**
+While we use `.env` files for local development, the process for injecting production secrets (like the `GEOCODE_API_KEY`) is not codified. This relies on manual configuration in the Cloud Console, which is error-prone and not repeatable.
+- **The Solution:** Use **Google Secret Manager**. The API key would be stored securely in Secret Manager. The Cloud Run service's identity would be granted the "Secret Manager Secret Accessor" role, and the `cloudbuild.yaml` would be updated to securely mount this secret as an environment variable at deployment time. This makes the entire process automated, secure, and defined as code.
+
+The final artifact is not just a working application; it is a clean, well-documented, fully-tested codebase with a professional, automated deployment pipeline—and a clear, forward-looking roadmap for future enhancement.
 
 The final cloud architecture we deployed is as follows:
 
