@@ -57,18 +57,35 @@ export class WeatherService {
   }
 
   private isCountryUsingFahrenheit(locationInfo: LocationInfo): boolean {
-    const fahrenheitCountries = ["us", "bs", "bz", "ky", "lr", "pw", "mh", "fm"];
+    const fahrenheitCountries = [
+        "us", // United States
+        "bs", // Bahamas
+        "bz", // Belize
+        "ky", // Cayman Islands
+        "lr", // Liberia
+        "pw", // Palau
+        "fm", // Federated States of Micronesia
+        "mh", // Marshall Islands
+        // U.S. Territories
+        "as", // American Samoa
+        "gu", // Guam
+        "mp", // Northern Mariana Islands
+        "pr", // Puerto Rico
+        "vi", // U.S. Virgin Islands
+    ];
+
     const countryCode = locationInfo.address?.country_code?.toLowerCase();
-    const displayName = locationInfo.display_name?.toLowerCase() ?? "";
     
-    if (typeof countryCode === 'string' && fahrenheitCountries.includes(countryCode)) {
+    if (countryCode != null && fahrenheitCountries.includes(countryCode)) {
       return true;
     }
     
-    if (displayName.length > 0 && displayName.includes('usa')) {
+    // Corrected to use direct access, as `display_name` is not nullable.
+    const displayName = locationInfo.display_name.toLowerCase();
+    if (displayName.includes('usa')) {
       return true;
     }
 
     return false;
   }
-} 
+}

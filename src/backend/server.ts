@@ -16,13 +16,14 @@ import { weatherCodeToImage } from "./weather-codes";
 const httpClient = axios;
 const locationService = new LocationService(httpClient, config.GEOCODE_API_URL, config.GEOCODE_API_KEY);
 const weatherService = new WeatherService(httpClient, config.WEATHER_API_URL);
-const geminiService = new GeminiService(httpClient);
+// This is the only line that changes in this file:
+const geminiService = new GeminiService();
 
 // --- Fastify and Templating Setup ---
 const environment = config.NODE_ENV;
 const isProduction = environment === 'production';
-const templatePath = isProduction 
-  ? path.join(__dirname, 'templates') 
+const templatePath = isProduction
+  ? path.join(__dirname, 'templates')
   : 'src/backend/templates';
 const templates = new nunjucks.Environment(new nunjucks.FileSystemLoader(templatePath));
 
@@ -102,9 +103,8 @@ server.get("/", async (request, reply) => {
 
     let wittyWeather = 'Unable to generate a witty weather summary.';
     try {
-      const latNum = parseFloat(locationInfo.lat);
-      const lonNum = parseFloat(locationInfo.lon);
-      wittyWeather = await geminiService.generateWittySummary(weatherInfo, latNum, lonNum);
+      // Your CurrentWeather model might be different, ensure it matches what GeminiService expects
+      wittyWeather = await geminiService.generateWittySummary(weatherInfo, parseFloat(locationInfo.lat), parseFloat(locationInfo.lon));
     } catch (e: any) {
       server.log.error('Witty weather generation failed:', e.message);
       // Non-critical error, so we can continue without it.
@@ -132,7 +132,7 @@ server.get("/", async (request, reply) => {
   } catch (e: any) {
     server.log.error(e);
     const rendered = templates.render("get_started.njk", { environment, serverMsg: e.message });
-    void reply.header("Content-Type", "text/html; charset=utf-8").status(500).send(rendered);
+    void reply.header("Content-Type", "text/html; charset=-8").status(500).send(rendered);
   }
 });
 

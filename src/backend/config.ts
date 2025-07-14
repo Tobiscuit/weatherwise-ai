@@ -12,6 +12,7 @@ const configSchema = z.object({
   GEOCODE_API_KEY: z.string().optional(),
   CACHE_DURATION_MS: z.coerce.number().default(5 * 60 * 1000), // 5 minutes
   MAX_CACHE_SIZE: z.coerce.number().default(100),
+  PROJECT_ID: z.string().min(1, 'PROJECT_ID cannot be empty.'),
 });
 
 type AppConfig = z.infer<typeof configSchema>;
@@ -25,4 +26,4 @@ function createConfig(): AppConfig {
   return result.data;
 }
 
-export const config = createConfig(); 
+export const config = createConfig();

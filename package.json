@@ -68,6 +68,7 @@
   "dependencies": {
     "@fastify/formbody": "^7.4.0",
     "@fastify/static": "^6.10.1",
+    "@google-cloud/vertexai": "^1.10.0",
     "axios": "^1.4.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.17.0",

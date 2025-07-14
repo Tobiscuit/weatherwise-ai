@@ -1,75 +1,37 @@
-import { GoogleAuth } from 'google-auth-library';
-import { GeminiServiceError } from '../errors';
+import { VertexAI } from '@google-cloud/vertexai';
+import { config } from '../config';
 import type { CurrentWeather } from '../weatherapi';
-import type { AxiosStatic, AxiosResponse } from 'axios';
-import type { AuthClient } from 'google-auth-library/build/src/auth/authclient';
-
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
-
-interface GeminiResponse {
-  candidates: Array<{
-    content: {
-      parts: Array<{
-        text: string;
-      }>;
-    };
-  }>;
-}
 
 export class GeminiService {
-  private auth: GoogleAuth;
-  
-  constructor(private readonly httpClient: AxiosStatic) {
-    this.auth = new GoogleAuth({
-      scopes: 'https://www.googleapis.com/auth/cloud-platform'
+  private vertexAI: VertexAI;
+
+  constructor() {
+    this.vertexAI = new VertexAI({
+      project: config.PROJECT_ID,
+      location: 'us-central1',
     });
   }
 
   async generateWittySummary(weatherData: CurrentWeather, lat: number, lon: number): Promise<string> {
-    const prompt = this.createPrompt(weatherData, lat, lon);
+    const model = this.vertexAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+    const prompt = `You are a witty weather bot. Give a short, funny summary for the weather at latitude ${lat} and longitude ${lon}.
     
+    Current weather data:
+    - Condition: ${weatherData.condition()}
+    - Current Temperature: ${weatherData.temperature.value}${weatherData.temperature.unit}
+    - Today's High: ${weatherData.highTemp()}${weatherData.temperature.unit}
+    - Today's Low: ${weatherData.lowTemp()}${weatherData.temperature.unit}`;
+
     try {
-      const client = await this.auth.getClient();
-      const accessToken = await this.getAccessToken(client);
+      const result = await model.generateContent(prompt);
+      const summary = result.response.candidates?.[0]?.content?.parts?.[0]?.text;
       
-      const response = await this.makeApiCall(accessToken, prompt);
+      return String(summary ?? 'Could not generate a witty summary.');
       
-      return response.data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'Could not generate a witty summary.';
-    } catch (error: any) {
-      console.error('Error in GeminiService:', error.message);
-      throw new GeminiServiceError('Failed to generate witty weather summary.');
+    } catch (error) {
+      console.error('Error calling Vertex AI:', error);
+      throw new Error('Failed to communicate with the Vertex AI API.');
     }
   }
-
-  private createPrompt(weatherData: CurrentWeather, lat: number, lon: number): string {
-    const weatherInfo = {
-      temperature: weatherData.temperature,
-      condition: weatherData.condition(),
-      highTemp: weatherData.highTemp(),
-      lowTemp: weatherData.lowTemp(),
-    };
-    return `You are a witty weather bot. Give a short, funny summary for the weather. Weather data: ${JSON.stringify(weatherInfo)}. Location: lat ${lat}, lon ${lon}.`;
-  }
-
-  private async getAccessToken(client: AuthClient): Promise<string> {
-    const tokens = await client.getAccessToken();
-    if (typeof tokens.token !== 'string' || tokens.token.length === 0) {
-      throw new Error('Failed to retrieve a valid access token.');
-    }
-    return tokens.token;
-  }
-
-  private async makeApiCall(accessToken: string, prompt: string): Promise<AxiosResponse<GeminiResponse>> {
-    return await this.httpClient.post<GeminiResponse>(
-      GEMINI_API_URL,
-      { contents: [{ parts: [{ text: prompt }] }] },
-      { 
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${accessToken}` 
-        },
-        timeout: 10000,
-      }
-    );
-  }
-} 
+}
